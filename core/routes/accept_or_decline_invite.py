@@ -21,7 +21,7 @@ async def accept_or_decline_invite(invite_id: int,
     invite = invite_service.get_invite(invite_id)
 
     # Проверка прав
-    if invite.get("invitee_id") != current_user.get("id"):
+    if invite.invitee_id != current_user.id:
         raise HTTPException(
             status_code=401,
             detail="У вас нет прав на редактирование этого приглашения")

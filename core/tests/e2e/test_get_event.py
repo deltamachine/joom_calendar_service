@@ -26,7 +26,7 @@ EXPECTED_DATA = {
             "first_name": "Vasya",
             "last_name": "Ivanov",
             "email": "vasya@gmail.com",
-            "tz_offset": 10800
+            "tz_offset": 0
         }
     ]
 }
