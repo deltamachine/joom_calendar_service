@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  db:
+    container_name: postgres
+    image: postgres:14
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: joom_calendar
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./core/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - dbdata:/var/lib/postgresql/data
+      - .:/code
+
+  web:
+    container_name: web
+    build: core
+    restart: always
+    ports:
+      - "8004:8000"
+    command: bash -c "alembic -c core/alembic.ini upgrade head && uvicorn core.app:app --host 0.0.0.0 --reload"
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - db
+
+volumes:
+    dbdata:
