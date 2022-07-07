@@ -11,12 +11,14 @@ git clone https://github.com/deltamachine/joom_calendar_service.git
 
 cd joom_calendar_service
 
-sudo docker-compose up --build -d
+docker-compose up --build -d
 ```
 
 Это запустит приложение по адресу http://0.0.0.0:8004/.
 
 Описание API-эндпойнтов (Swagger) можно найти по адресу http://0.0.0.0:8004/docs
+
+Тесты можно запустить командой ```docker exec web pytest core/tests/```
 
 ### Техническое задание
 
