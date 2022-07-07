@@ -13,7 +13,7 @@ class FreeSpotGetResponse(BaseModel):
     def make_serialized_item(data: dict) -> dict:
         result = {
             "starts_at": data.get('starts_at').strftime('%Y-%m-%d %H:%M'),
-            "ends_at": data.get('starts_at').strftime('%Y-%m-%d %H:%M')
+            "ends_at": data.get('ends_at').strftime('%Y-%m-%d %H:%M')
         }
 
         return result
