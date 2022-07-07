@@ -219,8 +219,8 @@ EXPECTED_DATA_4 = [
 ]
 
 
-def test_get_events_in_interval__get_current_user_events(client, main_user, main_user_credentials,
-                                                         secondary_user):
+def test_get_events_in_interval__get_current_user_events(
+        client, main_user, main_user_credentials, secondary_user):
     # Создаем первого пользователя
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
@@ -230,9 +230,11 @@ def test_get_events_in_interval__get_current_user_events(client, main_user, main
     user_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -250,15 +252,20 @@ def test_get_events_in_interval__get_current_user_events(client, main_user, main
     client.post("/events/", headers=authorization_headers, json=EVENT_2)
 
     # Получаем свои встречи
-    result = client.get(f"/events/?user_id={your_id}&from_time={INTERVAL_START}&to_time={INTERVAL_END}",
-                        headers=authorization_headers)
+    result = client.get(
+        f"/events/?user_id={your_id}&from_time={INTERVAL_START}&to_time={INTERVAL_END}",
+        headers=authorization_headers)
     result = result.json()
 
     assert result == EXPECTED_DATA_1
 
 
-def test_get_events_in_interval__get_other_user_events(client, main_user, main_user_credentials,
-                                                       secondary_user, secondary_user_credentials):
+def test_get_events_in_interval__get_other_user_events(
+        client,
+        main_user,
+        main_user_credentials,
+        secondary_user,
+        secondary_user_credentials):
     # Создаем первого пользователя
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
@@ -277,9 +284,11 @@ def test_get_events_in_interval__get_other_user_events(client, main_user, main_u
     EVENT_2['is_private'] = True
 
     # Логинимся за второго пользователя
-    result = client.post("/login/",
-                         data=secondary_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=secondary_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -289,31 +298,40 @@ def test_get_events_in_interval__get_other_user_events(client, main_user, main_u
     client.post("/events/", headers=authorization_headers, json=EVENT_2)
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
 
     # Смотрим встречи второго пользователя
-    result = client.get(f"/events/?user_id={user_id}&from_time={INTERVAL_START}&to_time={INTERVAL_END}",
-                        headers=authorization_headers)
+    result = client.get(
+        f"/events/?user_id={user_id}&from_time={INTERVAL_START}&to_time={INTERVAL_END}",
+        headers=authorization_headers)
     result = result.json()
 
     assert result == EXPECTED_DATA_2
 
 
-def test_get_events_in_interval__get_events_with_invites(client, main_user, main_user_credentials,
-                                                         secondary_user, secondary_user_credentials):
+def test_get_events_in_interval__get_events_with_invites(
+        client,
+        main_user,
+        main_user_credentials,
+        secondary_user,
+        secondary_user_credentials):
     # Создаем первого пользователя
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -329,9 +347,11 @@ def test_get_events_in_interval__get_events_with_invites(client, main_user, main
     user_id = result.json().get('id')
 
     # Логинимся за второго пользователя
-    result = client.post("/login/",
-                         data=secondary_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=secondary_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -344,30 +364,36 @@ def test_get_events_in_interval__get_events_with_invites(client, main_user, main
     client.post("/events/", headers=authorization_headers, json=EVENT_2)
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
 
     # Просматриваем встречи
-    result = client.get(f"/events/?user_id={your_id}&from_time={INTERVAL_START}&to_time={INTERVAL_END}",
-                        headers=authorization_headers)
+    result = client.get(
+        f"/events/?user_id={your_id}&from_time={INTERVAL_START}&to_time={INTERVAL_END}",
+        headers=authorization_headers)
     result = result.json()
 
     assert result == EXPECTED_DATA_3
 
 
-def test_get_events_in_interval__get_current_user_events_with_recurrent(client, main_user, main_user_credentials):
+def test_get_events_in_interval__get_current_user_events_with_recurrent(
+        client, main_user, main_user_credentials):
     # Создаем первого пользователя
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -383,8 +409,9 @@ def test_get_events_in_interval__get_current_user_events_with_recurrent(client, 
     client.post("/events/", headers=authorization_headers, json=EVENT_3)
 
     # Получаем свои встречи
-    result = client.get(f"/events/?user_id={your_id}&from_time={INTERVAL_START}&to_time={INTERVAL_END}",
-                        headers=authorization_headers)
+    result = client.get(
+        f"/events/?user_id={your_id}&from_time={INTERVAL_START}&to_time={INTERVAL_END}",
+        headers=authorization_headers)
     result = result.json()
 
     assert result == EXPECTED_DATA_4

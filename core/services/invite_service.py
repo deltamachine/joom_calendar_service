@@ -50,7 +50,8 @@ class InviteService:
         if invite:
             return invite
 
-        raise HTTPException(status_code=404, detail='Событие с таким ID не найдено')
+        raise HTTPException(status_code=404,
+                            detail='Событие с таким ID не найдено')
 
     def accept_or_decline_invite(self, invite_id: int, data: dict) -> None:
         """
@@ -66,6 +67,6 @@ class InviteService:
             self.db.add(invite)
             self.db.commit()
         except AttributeError:
-            raise HTTPException(status_code=404, detail='Событие с таким ID не найдено')
-
-
+            raise HTTPException(
+                status_code=404,
+                detail='Событие с таким ID не найдено')

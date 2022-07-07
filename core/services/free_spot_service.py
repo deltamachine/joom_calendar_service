@@ -15,7 +15,10 @@ class FreeSpotService:
         self.db = db
         self.interval_service = IntervalService(db)
 
-    def prepare_response(self, start_time: datetime, end_time: datetime) -> dict:
+    def prepare_response(
+            self,
+            start_time: datetime,
+            end_time: datetime) -> dict:
         """
         Оформляет ответ сервиса.
         """
@@ -27,7 +30,8 @@ class FreeSpotService:
 
         return response
 
-    def prepare_events(self, users: List[int], now: datetime) -> List[Union[Event, Invite]]:
+    def prepare_events(
+            self, users: List[int], now: datetime) -> List[Union[Event, Invite]]:
         """
         Достает все встречи и приглашения для заданных пользователей начиная с заданного времени.
         """
@@ -42,7 +46,10 @@ class FreeSpotService:
 
         return table
 
-    def get_closest_free_spot(self, users: List[int], meeting_length: int) -> dict:
+    def get_closest_free_spot(
+            self,
+            users: List[int],
+            meeting_length: int) -> dict:
         """
         Ищет ближайший свободный промежуток заданной длины для заданных пользователей.
         """
@@ -59,7 +66,7 @@ class FreeSpotService:
             return self.prepare_response(prev_end, prev_end + delta)
 
         for i in range(1, len(table)):
-            prev_end = get_end_time(table[i-1])
+            prev_end = get_end_time(table[i - 1])
             cur_start = get_start_time(table[i])
 
             if cur_start - prev_end >= delta:

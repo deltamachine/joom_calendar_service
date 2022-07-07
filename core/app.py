@@ -25,9 +25,12 @@ app.include_router(router)
 security = HTTPBasic()
 
 
-def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
-    correct_username = secrets.compare_digest(credentials.username, settings.swagger_user)
-    correct_password = secrets.compare_digest(credentials.password, settings.swagger_password)
+def get_current_username(
+        credentials: HTTPBasicCredentials = Depends(security)):
+    correct_username = secrets.compare_digest(
+        credentials.username, settings.swagger_user)
+    correct_password = secrets.compare_digest(
+        credentials.password, settings.swagger_password)
     if not (correct_username and correct_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -33,7 +33,9 @@ class UserService:
 
             return user
         except IntegrityError:
-            raise HTTPException(status_code=400, detail="Пользователь с таким email уже существует")
+            raise HTTPException(
+                status_code=400,
+                detail="Пользователь с таким email уже существует")
 
     def get_user_by_email(self, email: str) -> User:
         """
@@ -45,7 +47,8 @@ class UserService:
         if user:
             return user
 
-        raise HTTPException(status_code=404, detail='Пользователь с таким email не найден')
+        raise HTTPException(status_code=404,
+                            detail='Пользователь с таким email не найден')
 
     def get_user(self, user_id: int) -> User:
         """
@@ -57,4 +60,5 @@ class UserService:
         if user:
             return user
 
-        raise HTTPException(status_code=404, detail='Пользователь с таким ID не найден')
+        raise HTTPException(status_code=404,
+                            detail='Пользователь с таким ID не найден')

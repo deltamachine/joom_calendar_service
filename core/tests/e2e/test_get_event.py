@@ -34,7 +34,11 @@ EXPECTED_DATA = {
 FAKE_ID = 2
 
 
-def test_get_event__existing(client, main_user, main_user_credentials, secondary_user):
+def test_get_event__existing(
+        client,
+        main_user,
+        main_user_credentials,
+        secondary_user):
     # Создаем первого пользователя
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
@@ -44,9 +48,11 @@ def test_get_event__existing(client, main_user, main_user_credentials, secondary
     user_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -55,7 +61,10 @@ def test_get_event__existing(client, main_user, main_user_credentials, secondary
     EVENT_DATA['owner_id'] = your_id
     EVENT_DATA['participants'] = [user_id]
 
-    result = client.post("/events/", headers=authorization_headers, json=EVENT_DATA)
+    result = client.post(
+        "/events/",
+        headers=authorization_headers,
+        json=EVENT_DATA)
 
     event_id = result.json().get('id')
 
@@ -66,14 +75,17 @@ def test_get_event__existing(client, main_user, main_user_credentials, secondary
     assert result == EXPECTED_DATA
 
 
-def test_get_event__non_existing__with_token(client, main_user, main_user_credentials):
+def test_get_event__non_existing__with_token(
+        client, main_user, main_user_credentials):
     # Создаем пользователя
     client.post("/signup/", json=main_user)
 
     # Логинимся за пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}

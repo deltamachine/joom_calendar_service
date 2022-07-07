@@ -30,7 +30,8 @@ async def get_events_in_interval(user_id: int,
     to_time = datetime.strptime(to_time, "%Y-%m-%d %H:%M")
 
     interval_service = IntervalService(db)
-    events = interval_service.get_events_in_interval(user_id, from_time, to_time=to_time)
+    events = interval_service.get_events_in_interval(
+        user_id, from_time, to_time=to_time)
 
     result = []
 

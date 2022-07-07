@@ -27,7 +27,10 @@ class RecurrencyMetaService:
         elif freq == 'monthly':
             return {freq: details}
         elif freq == 'weekly':
-            return {freq: [int(x) for x in details.split(', ')], 'interval': interval}
+            return {
+                freq: [
+                    int(x) for x in details.split(', ')],
+                'interval': interval}
 
     def create_recurrency_meta(self, event: Event) -> List[RecurrencyMeta]:
         """
@@ -67,10 +70,12 @@ class RecurrencyMetaService:
                     meta.first_occurrence = event.starts_at
                 elif day > day_of_week:
                     delta = day - day_of_week
-                    meta.first_occurrence = event.starts_at + timedelta(days=delta)
+                    meta.first_occurrence = event.starts_at + \
+                        timedelta(days=delta)
                 else:
                     delta = day + (day_of_week - day) + 1
-                    meta.first_occurrence = event.starts_at + timedelta(days=delta)
+                    meta.first_occurrence = event.starts_at + \
+                        timedelta(days=delta)
 
                 metas.append(meta)
 

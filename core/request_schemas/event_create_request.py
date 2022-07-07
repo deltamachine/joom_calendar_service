@@ -28,24 +28,33 @@ class EventCreateRequest(BaseModel):
         rule = value.split(' | ')
 
         if len(rule) != 4:
-            raise HTTPException(status_code=400, detail="Неправильно задан формат правила повторения")
+            raise HTTPException(
+                status_code=400,
+                detail="Неправильно задан формат правила повторения")
 
         freq = rule[0]
         details = rule[1]
         interval = rule[3]
 
-        if (freq == 'yearly' or freq == 'daily' or freq == 'monthly') and bool(details) is True:
+        if (freq == 'yearly' or freq == 'daily' or freq ==
+                'monthly') and bool(details) is True:
             return value
         elif freq == 'weekly':
             try:
                 [int(x) for x in details.split(', ')]
                 return value
             except ValueError:
-                raise HTTPException(status_code=400, detail="Неправильно задан формат правила повторения")
+                raise HTTPException(
+                    status_code=400,
+                    detail="Неправильно задан формат правила повторения")
 
         try:
             int(interval)
         except ValueError:
-            raise HTTPException(status_code=400, detail="Неправильно задан формат правила повторения")
+            raise HTTPException(
+                status_code=400,
+                detail="Неправильно задан формат правила повторения")
 
-        raise HTTPException(status_code=400, detail="Неправильно задан формат правила повторения")
+        raise HTTPException(
+            status_code=400,
+            detail="Неправильно задан формат правила повторения")

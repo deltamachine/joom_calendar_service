@@ -24,17 +24,26 @@ class IntervalService:
         elif invite and invite.invitee_id == user_id:
             self.result.append(invite)
 
-    def filter_events(self, user_id: int, to_time: datetime = None) -> List[Event]:
+    def filter_events(
+            self,
+            user_id: int,
+            to_time: datetime = None) -> List[Event]:
         """
         Фильтрует события в календаре.
         """
 
-        events = self.db.query(Event, RecurrencyMeta, Invite) \
-            .join(RecurrencyMeta, isouter=True) \
-            .join(Invite, isouter=True) \
-            .filter((Event.owner_id == user_id) | (
-                (Invite.invitee_id == user_id) & (Invite.is_viewed.is_(False) | (Invite.is_accepted.is_(True)))))\
-
+        events = self.db.query(
+            Event,
+            RecurrencyMeta,
+            Invite) .join(
+            RecurrencyMeta,
+            isouter=True) .join(
+            Invite,
+            isouter=True) .filter(
+                (Event.owner_id == user_id) | (
+                    (Invite.invitee_id == user_id) & (
+                        Invite.is_viewed.is_(False) | (
+                            Invite.is_accepted.is_(True)))))
         if to_time:
             events = events.filter(Event.starts_at < to_time)
 
@@ -58,7 +67,11 @@ class IntervalService:
 
         return rec_event
 
-    def get_events_in_interval(self, user_id: int, from_time: datetime, to_time: datetime = None) -> List[Union[Event, Invite]]:
+    def get_events_in_interval(self,
+                               user_id: int,
+                               from_time: datetime,
+                               to_time: datetime = None) -> List[Union[Event,
+                                                                       Invite]]:
         """
         Находит все встречи и инвайты пользователя в заданном интервале.
         """
@@ -67,7 +80,8 @@ class IntervalService:
         events = self.filter_events(user_id, to_time=to_time)
 
         for event, meta, invite in events:
-            if not event.is_recurrent and (event.starts_at >= from_time or (event.starts_at < from_time and event.ends_at > from_time)):
+            if not event.is_recurrent and (event.starts_at >= from_time or (
+                    event.starts_at < from_time and event.ends_at > from_time)):
                 self.add_to_result(user_id, event, invite)
             elif event.is_recurrent:
                 start_time = meta.first_occurrence

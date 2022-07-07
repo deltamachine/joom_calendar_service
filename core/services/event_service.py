@@ -59,4 +59,5 @@ class EventService:
         if event:
             return event
 
-        raise HTTPException(status_code=404, detail='Событие с таким ID не найдено')
+        raise HTTPException(status_code=404,
+                            detail='Событие с таким ID не найдено')

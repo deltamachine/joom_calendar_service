@@ -27,14 +27,18 @@ class UserAuthenticationService:
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         self.user_service = UserService(db)
 
-    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
+    def verify_password(
+            self,
+            plain_password: str,
+            hashed_password: str) -> bool:
         """
         Проверяет, что переданный пароль совпадает с хэшированным паролем в базе.
         """
 
         return self.pwd_context.verify(plain_password, hashed_password)
 
-    def authenticate_user(self, username: str, password: str) -> Union[bool, User]:
+    def authenticate_user(self, username: str,
+                          password: str) -> Union[bool, User]:
         """
         Аутентифицирует пользователя.
         """
@@ -49,7 +53,8 @@ class UserAuthenticationService:
 
         return user
 
-    def create_access_token(self, data: dict, expires_delta: Union[timedelta, None]) -> str:
+    def create_access_token(
+            self, data: dict, expires_delta: Union[timedelta, None]) -> str:
         """
         Создает токен для пользователя.
         """
@@ -67,7 +72,9 @@ class UserAuthenticationService:
         return encoded_jwt
 
     @staticmethod
-    def get_current_user(token: str = Depends(oauth2_schema), db: Session = Depends(get_db)) -> User:
+    def get_current_user(
+            token: str = Depends(oauth2_schema),
+            db: Session = Depends(get_db)) -> User:
         """
         Проверяет, существует ли пользователь, передавший токен, в базе, и возвращает его.
         """

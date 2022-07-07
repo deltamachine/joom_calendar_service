@@ -26,7 +26,10 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 testing_engine = create_engine(TESTING_SQLALCHEMY_DATABASE_URL)
 
 if "pytest" in sys.argv[0]:
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=testing_engine)
+    SessionLocal = sessionmaker(
+        autocommit=False,
+        autoflush=False,
+        bind=testing_engine)
 else:
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

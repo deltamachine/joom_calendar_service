@@ -20,7 +20,9 @@ async def create_event(data: EventCreateRequest,
 
     # Проверка прав
     if current_user.id != data.owner_id:
-        raise HTTPException(status_code=401, detail="Вы не можете создавать встречи от лица другого пользователя")
+        raise HTTPException(
+            status_code=401,
+            detail="Вы не можете создавать встречи от лица другого пользователя")
 
     # Создание встречи
     event_service = EventService(db)

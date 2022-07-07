@@ -27,11 +27,12 @@ class EventResponse(BaseModel):
             'starts_at': event.starts_at.strftime("%Y-%m-%d %H:%M"),
             'ends_at': event.ends_at.strftime("%Y-%m-%d %H:%M"),
             'description': "busy" if hide_private else event.description,
-            'owner': UserResponse.serializer(event.owner),
-            'participants': [] if hide_private or not event.participants else [UserResponse.serializer(participant) for participant in event.participants],
+            'owner': UserResponse.serializer(
+                event.owner),
+            'participants': [] if hide_private or not event.participants else [
+                UserResponse.serializer(participant) for participant in event.participants],
             'is_private': event.is_private,
-            'is_recurrent': event.is_recurrent
-        }
+            'is_recurrent': event.is_recurrent}
 
         return result
 

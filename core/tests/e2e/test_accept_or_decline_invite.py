@@ -7,8 +7,12 @@ EVENT_DATA = {
 }
 
 
-def test_accept_or_decline_invite__accept_my_invite(client, main_user, main_user_credentials,
-                                                    secondary_user, secondary_user_credentials):
+def test_accept_or_decline_invite__accept_my_invite(
+        client,
+        main_user,
+        main_user_credentials,
+        secondary_user,
+        secondary_user_credentials):
     # Создаем пользователя 1, он же владелец встречи
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
@@ -18,9 +22,11 @@ def test_accept_or_decline_invite__accept_my_invite(client, main_user, main_user
     user_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -32,9 +38,11 @@ def test_accept_or_decline_invite__accept_my_invite(client, main_user, main_user
     client.post("/events/", json=EVENT_DATA, headers=authorization_headers)
 
     # Логинимся за второго пользователя
-    result = client.post("/login/",
-                         data=secondary_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=secondary_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -49,8 +57,12 @@ def test_accept_or_decline_invite__accept_my_invite(client, main_user, main_user
     assert result.status_code == 204
 
 
-def test_accept_or_decline_invite__decline_my_invite(client, main_user, main_user_credentials,
-                                                     secondary_user, secondary_user_credentials):
+def test_accept_or_decline_invite__decline_my_invite(
+        client,
+        main_user,
+        main_user_credentials,
+        secondary_user,
+        secondary_user_credentials):
     # Создаем первого пользователя, он же владелец встречи
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
@@ -60,9 +72,11 @@ def test_accept_or_decline_invite__decline_my_invite(client, main_user, main_use
     user_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -74,9 +88,11 @@ def test_accept_or_decline_invite__decline_my_invite(client, main_user, main_use
     client.post("/events/", json=EVENT_DATA, headers=authorization_headers)
 
     # Логинимся за второго пользователя
-    result = client.post("/login/",
-                         data=secondary_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=secondary_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -91,8 +107,8 @@ def test_accept_or_decline_invite__decline_my_invite(client, main_user, main_use
     assert result.status_code == 204
 
 
-def test_accept_or_decline_invite__decline_others_invite(client, main_user, main_user_credentials,
-                                                         secondary_user):
+def test_accept_or_decline_invite__decline_others_invite(
+        client, main_user, main_user_credentials, secondary_user):
     # Создаем первого пользователя, он же владелец встречи
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
@@ -102,9 +118,11 @@ def test_accept_or_decline_invite__decline_others_invite(client, main_user, main
     user_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}

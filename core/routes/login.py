@@ -20,7 +20,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(),
     """
 
     auth_service = UserAuthenticationService(db)
-    user = auth_service.authenticate_user(form_data.username, form_data.password)
+    user = auth_service.authenticate_user(
+        form_data.username, form_data.password)
 
     if not user:
         raise HTTPException(
@@ -29,7 +30,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(),
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token_expires = timedelta(minutes=settings.access_token_expires_in_minutes)
+    access_token_expires = timedelta(
+        minutes=settings.access_token_expires_in_minutes)
     access_token = auth_service.create_access_token(
         data={"username": user.email}, expires_delta=access_token_expires
     )

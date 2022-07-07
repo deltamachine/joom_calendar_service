@@ -46,8 +46,12 @@ EXPECTED_DATA_3 = {
 }
 
 
-def test_get_closest_free_spot__free_time_right_now(client, main_user, main_user_credentials,
-                                                    secondary_user, secondary_user_credentials):
+def test_get_closest_free_spot__free_time_right_now(
+        client,
+        main_user,
+        main_user_credentials,
+        secondary_user,
+        secondary_user_credentials):
     """
     Потенциально flaky тест, зависит от текущего времени.
     """
@@ -57,9 +61,11 @@ def test_get_closest_free_spot__free_time_right_now(client, main_user, main_user
     your_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -75,9 +81,11 @@ def test_get_closest_free_spot__free_time_right_now(client, main_user, main_user
     user_id = result.json().get('id')
 
     # Логинимся за второго пользователя
-    result = client.post("/login/",
-                         data=secondary_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=secondary_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -89,21 +97,29 @@ def test_get_closest_free_spot__free_time_right_now(client, main_user, main_user
     client.post("/events/", json=EVENT_2, headers=authorization_headers)
 
     # Получаем ближайшее окно
-    result = client.get(f"/spots/?users=1&users=2&meeting_length={MEETING_LENGTH}", headers=authorization_headers)
+    result = client.get(
+        f"/spots/?users=1&users=2&meeting_length={MEETING_LENGTH}",
+        headers=authorization_headers)
 
     assert result.json() == EXPECTED_DATA_1
 
 
-def test_get_closest_free_spot__free_time_in_the_middle_of_meetings(client, main_user, main_user_credentials,
-                                                                    secondary_user, secondary_user_credentials):
+def test_get_closest_free_spot__free_time_in_the_middle_of_meetings(
+        client,
+        main_user,
+        main_user_credentials,
+        secondary_user,
+        secondary_user_credentials):
     # Создаем первого пользователя
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -119,9 +135,11 @@ def test_get_closest_free_spot__free_time_in_the_middle_of_meetings(client, main
     user_id = result.json().get('id')
 
     # Логинимся за второго пользователя
-    result = client.post("/login/",
-                         data=secondary_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=secondary_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -133,21 +151,29 @@ def test_get_closest_free_spot__free_time_in_the_middle_of_meetings(client, main
     client.post("/events/", json=EVENT_2, headers=authorization_headers)
 
     # Получаем ближайшее окно
-    result = client.get(f"/spots/?users=1&users=2&meeting_length={MEETING_LENGTH}", headers=authorization_headers)
+    result = client.get(
+        f"/spots/?users=1&users=2&meeting_length={MEETING_LENGTH}",
+        headers=authorization_headers)
 
     assert result.json() == EXPECTED_DATA_2
 
 
-def test_get_closest_free_spot__free_time_after_all_events(client, main_user, main_user_credentials,
-                                                           secondary_user, secondary_user_credentials):
+def test_get_closest_free_spot__free_time_after_all_events(
+        client,
+        main_user,
+        main_user_credentials,
+        secondary_user,
+        secondary_user_credentials):
     # Создаем первого пользователя
     result = client.post("/signup/", json=main_user)
     your_id = result.json().get('id')
 
     # Логинимся за первого пользователя
-    result = client.post("/login/",
-                         data=main_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -167,9 +193,11 @@ def test_get_closest_free_spot__free_time_after_all_events(client, main_user, ma
     user_id = result.json().get('id')
 
     # Логинимся за второго пользователя
-    result = client.post("/login/",
-                         data=secondary_user_credentials,
-                         headers={"Content-Type": "application/x-www-form-urlencoded"})
+    result = client.post(
+        "/login/",
+        data=secondary_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
 
     token = result.json().get('access_token')
     authorization_headers = {"Authorization": f"Bearer {token}"}
@@ -181,6 +209,8 @@ def test_get_closest_free_spot__free_time_after_all_events(client, main_user, ma
     client.post("/events/", json=EVENT_3, headers=authorization_headers)
 
     # Получаем ближайшее окно
-    result = client.get(f"/spots/?users=1&users=2&meeting_length={MEETING_LENGTH}", headers=authorization_headers)
+    result = client.get(
+        f"/spots/?users=1&users=2&meeting_length={MEETING_LENGTH}",
+        headers=authorization_headers)
 
     assert result.json() == EXPECTED_DATA_3
