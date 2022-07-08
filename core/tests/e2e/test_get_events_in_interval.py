@@ -24,8 +24,32 @@ EVENT_3_DATA = {
     "recurrency_rule": "weekly | 2, 3 | interval | 1"
 }
 
+EVENT_4_DATA = {
+    "starts_at": "2022-05-25 21:00",
+    "ends_at": "2022-05-25 22:00",
+    "description": "Recurrent meeting",
+    "is_private": False,
+    "is_recurrent": True,
+    "recurrency_rule": "monthly | True | interval | 1"
+}
+
+EVENT_5_DATA = {
+    "starts_at": "2022-05-25 21:00",
+    "ends_at": "2022-05-25 22:00",
+    "description": "Recurrent meeting",
+    "is_private": False,
+    "is_recurrent": True,
+    "recurrency_rule": "weekly | 2, 3 | interval | 2"
+}
+
 INTERVAL_START = "2022-06-01 19:00"
 INTERVAL_END = "2022-06-07 00:00"
+
+INTERVAL_START_2 = "2022-06-01 00:00"
+INTERVAL_END_2 = "2022-08-01 00:00"
+
+INTERVAL_START_3 = "2022-06-01 00:00"
+INTERVAL_END_3 = "2022-07-01 00:00"
 
 EXPECTED_DATA_1 = [
     {
@@ -204,6 +228,108 @@ EXPECTED_DATA_4 = [
         "id": 2,
         "starts_at": "2022-06-02 21:00",
         "ends_at": "2022-06-02 22:00",
+        "description": "Recurrent meeting",
+        "is_private": False,
+        "is_recurrent": True,
+        "owner": {
+            "id": 1,
+            "first_name": "Anya",
+            "last_name": "Kondrateva",
+            "email": "anya@gmail.com",
+            "tz_offset": 10800
+        },
+        "participants": []
+    },
+]
+
+EXPECTED_DATA_5 = [
+    {
+        "id": 1,
+        "starts_at": "2022-06-25 21:00",
+        "ends_at": "2022-06-25 22:00",
+        "description": "Recurrent meeting",
+        "is_private": False,
+        "is_recurrent": True,
+        "owner": {
+            "id": 1,
+            "first_name": "Anya",
+            "last_name": "Kondrateva",
+            "email": "anya@gmail.com",
+            "tz_offset": 10800
+        },
+        "participants": []
+    },
+    {
+        "id": 1,
+        "starts_at": "2022-07-25 21:00",
+        "ends_at": "2022-07-25 22:00",
+        "description": "Recurrent meeting",
+        "is_private": False,
+        "is_recurrent": True,
+        "owner": {
+            "id": 1,
+            "first_name": "Anya",
+            "last_name": "Kondrateva",
+            "email": "anya@gmail.com",
+            "tz_offset": 10800
+        },
+        "participants": []
+    },
+]
+
+EXPECTED_DATA_6 = [
+    {
+        "id": 1,
+        "starts_at": "2022-06-08 21:00",
+        "ends_at": "2022-06-08 22:00",
+        "description": "Recurrent meeting",
+        "is_private": False,
+        "is_recurrent": True,
+        "owner": {
+            "id": 1,
+            "first_name": "Anya",
+            "last_name": "Kondrateva",
+            "email": "anya@gmail.com",
+            "tz_offset": 10800
+        },
+        "participants": []
+    },
+    {
+        "id": 1,
+        "starts_at": "2022-06-09 21:00",
+        "ends_at": "2022-06-09 22:00",
+        "description": "Recurrent meeting",
+        "is_private": False,
+        "is_recurrent": True,
+        "owner": {
+            "id": 1,
+            "first_name": "Anya",
+            "last_name": "Kondrateva",
+            "email": "anya@gmail.com",
+            "tz_offset": 10800
+        },
+        "participants": []
+    },
+    {
+        "id": 1,
+        "starts_at": "2022-06-22 21:00",
+        "ends_at": "2022-06-22 22:00",
+        "description": "Recurrent meeting",
+        "is_private": False,
+        "is_recurrent": True,
+        "owner": {
+            "id": 1,
+            "first_name": "Anya",
+            "last_name": "Kondrateva",
+            "email": "anya@gmail.com",
+            "tz_offset": 10800
+        },
+        "participants": []
+    },
+    {
+        "id": 1,
+        "starts_at": "2022-06-23 21:00",
+        "ends_at": "2022-06-23 22:00",
         "description": "Recurrent meeting",
         "is_private": False,
         "is_recurrent": True,
@@ -415,3 +541,65 @@ def test_get_events_in_interval__get_current_user_events_with_recurrent(
     result = result.json()
 
     assert result == EXPECTED_DATA_4
+
+
+def test_get_events_in_interval__get_current_user_monthly_events(
+        client, main_user, main_user_credentials):
+    # Создаем первого пользователя
+    result = client.post("/signup/", json=main_user)
+    your_id = result.json().get('id')
+
+    # Логинимся за первого пользователя
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
+
+    token = result.json().get('access_token')
+    authorization_headers = {"Authorization": f"Bearer {token}"}
+
+    # Создаем встречу
+    EVENT = dict(EVENT_4_DATA)
+    EVENT['owner_id'] = your_id
+
+    client.post("/events/", headers=authorization_headers, json=EVENT)
+
+    # Получаем свои встречи
+    result = client.get(
+        f"/events/?user_id={your_id}&from_time={INTERVAL_START_2}&to_time={INTERVAL_END_2}",
+        headers=authorization_headers)
+    result = result.json()
+
+    assert result == EXPECTED_DATA_5
+
+
+def test_get_events_in_interval__get_current_user_bi_weekly_events(
+        client, main_user, main_user_credentials):
+    # Создаем первого пользователя
+    result = client.post("/signup/", json=main_user)
+    your_id = result.json().get('id')
+
+    # Логинимся за первого пользователя
+    result = client.post(
+        "/login/",
+        data=main_user_credentials,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"})
+
+    token = result.json().get('access_token')
+    authorization_headers = {"Authorization": f"Bearer {token}"}
+
+    # Создаем встречу
+    EVENT = dict(EVENT_5_DATA)
+    EVENT['owner_id'] = your_id
+
+    client.post("/events/", headers=authorization_headers, json=EVENT)
+
+    # Получаем свои встречи
+    result = client.get(
+        f"/events/?user_id={your_id}&from_time={INTERVAL_START_3}&to_time={INTERVAL_END_3}",
+        headers=authorization_headers)
+    result = result.json()
+
+    assert result == EXPECTED_DATA_6
