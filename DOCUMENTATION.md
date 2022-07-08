@@ -48,7 +48,7 @@
     "is_private": False,
     "is_recurrent": False
     "owner_id": 1,
-    "participants": [2, 3]
+    "participants": [2, 3] // Опциональный параметр
 }
 ```
 
